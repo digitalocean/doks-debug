@@ -1,0 +1,1 @@
+A Docker image with Kubernetes manifests for investigation and troubleshooting.

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doks-debug
+  labels:
+    app: doks-debug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: doks-debug
+  template:
+    metadata:
+      labels:
+        name: doks-debug
+    spec:
+      containers:
+          securityContext:
+            privileged: true
+          image: digitalocean/doks-debug:latest
+          name: doks-debug
+          command: [ "sleep", "infinity" ]

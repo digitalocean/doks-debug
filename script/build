@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+. script/env
+docker build -t ${DOCKER_REPO} .
