@@ -18,7 +18,7 @@ spec:
       - name: doks-debug
         securityContext:
           privileged: true
-        image: snormore/doks-debug:latest
+        image: digitalocean/doks-debug:latest
         command: [ "sleep", "infinity" ]
         volumeMounts:
           - name: host
