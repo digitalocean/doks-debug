@@ -17,31 +17,21 @@ spec:
       hostIPC: true
       hostNetwork: true
       containers:
-          securityContext:
-            privileged: true
-          image: digitalocean/doks-debug:latest
-          name: doks-debug
-          command: [ "sleep", "infinity" ]
-          volumeMounts:
-            - name: dev
-              mountPath: /dev
-            - name: run
-              mountPath: /var/run/docker.sock
-            - name: sys
-              mountPath: /sys
-            - name: log
-              mountPath: /var/log
+      - name: doks-debug
+        securityContext:
+          privileged: true
+        image: snormore/doks-debug:latest
+        command: [ "sleep", "infinity" ]
+        volumeMounts:
+          - name: host
+            mountPath: /host
+          - name: docker
+            mountPath: /var/run/docker.sock
       volumes:
-        - name: dev
+        - name: host
           hostPath:
-              path: /dev
-        - name: run
+            path: /
+        - name: docker
           hostPath:
-              path: /var/run/docker.sock
-              type: Socket
-        - name: sys
-          hostPath:
-              path: /sys
-        - name: log
-          hostPath:
-              path: /var/log
+            path: /var/run/docker.sock
+            type: Socket
