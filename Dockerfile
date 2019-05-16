@@ -4,7 +4,8 @@ WORKDIR /root
 RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man\/*' /etc/dpkg/dpkg.cfg.d/excludes
 
 RUN apt-get update -qq && \
-    apt-get install -y apt-transport-https ca-certificates \
+    apt-get install -y apt-transport-https \
+                       ca-certificates \
                        software-properties-common \
                        man \
                        manpages-posix \
