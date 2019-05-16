@@ -1,0 +1,9 @@
+services:
+  - 'docker'
+
+script:
+  - docker build -t doks-debug .
+  - docker run --rm -it doks-debug sleep 1
+
+notifications:
+  email: false
