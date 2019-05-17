@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: doks-debug
+  labels:
+    app: doks-debug
+spec:
+  selector:
+    matchLabels:
+      name: doks-debug
+  template:
+    metadata:
+      labels:
+        name: doks-debug
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      containers:
+      - name: doks-debug
+        securityContext:
+          privileged: true
+        image: digitalocean/doks-debug:latest
+        command: [ "sleep", "infinity" ]
+        volumeMounts:
+          - name: host
+            mountPath: /host
+          - name: docker
+            mountPath: /var/run/docker.sock
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+        - name: docker
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
