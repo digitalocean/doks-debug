@@ -1,10 +1,10 @@
 A Docker image with Kubernetes manifests for investigation and troubleshooting your cluster.
 
-## Purpose
+# Purpose
 
 The DOKS team provides this image for use as-is and for transparency as the image used when a request to "deploy a debug pod" is made to our customers, which may occur when deeper investigation is needed with direct access to a cluster.
 
-## Usage
+# Usage
 
 The included DaemonSet manifest will:
 
@@ -42,3 +42,7 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`iproute2`](https://wiki.linuxfoundation.org/networking/iproute2) - is a collection of utilities for controlling TCP / IP networking and traffic control in Linux.
  - [`strace`](https://github.com/strace/strace) - is a diagnostic, debugging and instructional userspace utility with a traditional command-line interface for Linux. It is used to monitor and tamper with interactions between processes and the Linux kernel, which include system calls, signal deliveries, and changes of process state.
  - [`docker`](https://docs.docker.com/engine/reference/commandline/cli/) - is the CLI tool used for interacting with Docker containers on the system.
+
+ # Contributing
+
+ At DigitalOcean we value and love our community! If you have any issues or would like to contribute, feel free to open an issue or PR and cc any of the maintainers.
