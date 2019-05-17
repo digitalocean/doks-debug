@@ -1,5 +1,7 @@
 A Docker image with Kubernetes manifests for investigation and troubleshooting your cluster.
 
+[![Build Status](https://travis-ci.org/digitalocean/doks-debug.svg?branch=master)](https://travis-ci.org/digitalocean/doks-debug)
+
 # Purpose
 
 The DOKS team provides this image for use as-is and for transparency as the image used when a request to "deploy a debug pod" is made to our customers, which may occur when deeper investigation is needed with direct access to a cluster.
