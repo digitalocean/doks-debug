@@ -13,6 +13,7 @@ RUN apt-get update -qq && \
                        vim \
                        screen \
                        curl \
+                       dstat \
                        jq \
                        dnsutils \
                        tcpdump \
