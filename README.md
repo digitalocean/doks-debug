@@ -44,6 +44,8 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`iproute2`](https://wiki.linuxfoundation.org/networking/iproute2) - is a collection of utilities for controlling TCP / IP networking and traffic control in Linux.
  - [`strace`](https://github.com/strace/strace) - is a diagnostic, debugging and instructional userspace utility with a traditional command-line interface for Linux. It is used to monitor and tamper with interactions between processes and the Linux kernel, which include system calls, signal deliveries, and changes of process state.
  - [`docker`](https://docs.docker.com/engine/reference/commandline/cli/) - is the CLI tool used for interacting with Docker containers on the system.
+ - [`dstat`](http://dag.wiee.rs/home-made/dstat/) - is a versatile replacement for vmstat, iostat, netstat and ifstat. Dstat overcomes some of their limitations and adds some extra features, more counters and flexibility. Dstat is handy for monitoring systems during performance tuning tests, benchmarks or troubleshooting.
+ - [`htop`](https://hisham.hm/htop/) - is interactive process viewer for Unix systems.
 
  # Contributing
 
