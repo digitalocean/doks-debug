@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: doks-debug
+  namespace: kube-system
   labels:
     app: doks-debug
 spec:
@@ -22,11 +23,19 @@ spec:
           privileged: true
         image: digitalocean/doks-debug:latest
         command: [ "sleep", "infinity" ]
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "32Mi"
+            cpu: "100m"
         volumeMounts:
           - name: host
             mountPath: /host
           - name: docker
             mountPath: /var/run/docker.sock
+      priorityClassName: system-cluster-critical
       volumes:
         - name: host
           hostPath:
