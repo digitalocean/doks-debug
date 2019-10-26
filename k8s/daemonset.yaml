@@ -17,6 +17,13 @@ spec:
       hostPID: true
       hostIPC: true
       hostNetwork: true
+      tolerations:
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
+      - key: CriticalAddonsOnly
+        operator: Exists
       containers:
       - name: doks-debug
         securityContext:
