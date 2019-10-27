@@ -8,7 +8,11 @@ The DOKS team provides this image for use as-is and for transparency as the imag
 
 # Usage
 
-The included DaemonSet manifest will:
+```bash
+kubectl apply -f k8s/daemonset.yaml
+```
+
+This DaemonSet manifest will:
 
  1. Ensure a pod with our Docker image is running indefinitely on every node.
  2. Use `hostPID`, `hostIPC`, and `hostNetwork`.
