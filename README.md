@@ -51,6 +51,17 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`dstat`](http://dag.wiee.rs/home-made/dstat/) - is a versatile replacement for vmstat, iostat, netstat and ifstat. Dstat overcomes some of their limitations and adds some extra features, more counters and flexibility. Dstat is handy for monitoring systems during performance tuning tests, benchmarks or troubleshooting.
  - [`htop`](https://hisham.hm/htop/) - is interactive process viewer for Unix systems.
 
- # Contributing
+# Tips and Tricks
+
+## chroot + systemctl
+
+```bash
+chroot /host /bin/bash
+systemctl status kubelet
+journalctl -xe
+journalctl -u kubelet
+```
+
+# Contributing
 
  At DigitalOcean we value and love our community! If you have any issues or would like to contribute, feel free to open an issue or PR and cc any of the maintainers.
