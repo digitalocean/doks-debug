@@ -8,7 +8,11 @@ The DOKS team provides this image for use as-is and for transparency as the imag
 
 # Usage
 
-The included DaemonSet manifest will:
+```bash
+kubectl apply -f k8s/daemonset.yaml
+```
+
+This DaemonSet manifest will:
 
  1. Ensure a pod with our Docker image is running indefinitely on every node.
  2. Use `hostPID`, `hostIPC`, and `hostNetwork`.
@@ -18,15 +22,15 @@ The included DaemonSet manifest will:
 In order to make use of these workloads, you can exec into a pod of choice by name:
 
 ```bash
-kubectl exec -it my-pod-name bash
+kubectl -n kube-system exec -it my-pod-name bash
 ```
 
 If you know the specific node name that you're interested in, you can exec into the debug pod on that node with:
 
 ```bash
 NODE_NAME="my-node-name"
-POD_NAME=$(kubectl get pods --field-selector spec.nodeName=${NODE_NAME} -ojsonpath='{.items[0].metadata.name}')
-kubectl exec -it ${POD_NAME} bash
+POD_NAME=$(kubectl -n kube-system get pods --field-selector spec.nodeName=${NODE_NAME} -ojsonpath='{.items[0].metadata.name}')
+kubectl -n kube-system exec -it ${POD_NAME} bash
 ```
 
 Once you're in, you have access to the set of tools listed in the `Dockerfile`. This includes:
@@ -47,6 +51,17 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`dstat`](http://dag.wiee.rs/home-made/dstat/) - is a versatile replacement for vmstat, iostat, netstat and ifstat. Dstat overcomes some of their limitations and adds some extra features, more counters and flexibility. Dstat is handy for monitoring systems during performance tuning tests, benchmarks or troubleshooting.
  - [`htop`](https://hisham.hm/htop/) - is interactive process viewer for Unix systems.
 
- # Contributing
+# Tips and Tricks
+
+## chroot + systemctl
+
+```bash
+chroot /host /bin/bash
+systemctl status kubelet
+journalctl -xe
+journalctl -u kubelet
+```
+
+# Contributing
 
  At DigitalOcean we value and love our community! If you have any issues or would like to contribute, feel free to open an issue or PR and cc any of the maintainers.
