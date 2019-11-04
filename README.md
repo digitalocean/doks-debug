@@ -19,23 +19,29 @@ This DaemonSet manifest will:
  3. Mount the entire host filesystem to `/host` in the containers.
  4. Mount `/var/run/docker.sock` from the host.
 
-In order to make use of these workloads, you can exec into a pod of choice by name:
+In order to make use of these workloads, you can attach into a pod of choice by name:
+
+```bash
+kubectl -n kube-system attach -it my-pod-name
+```
+
+Alternativly, you can exec into the pod:
 
 ```bash
 kubectl -n kube-system exec -it my-pod-name bash
 ```
 
-If you know the specific node name that you're interested in, you can exec into the debug pod on that node with:
+If you know the specific node name that you're interested in, you can attach into the debug pod on that node with:
 
 ```bash
 NODE_NAME="my-node-name"
 POD_NAME=$(kubectl -n kube-system get pods --field-selector spec.nodeName=${NODE_NAME} -ojsonpath='{.items[0].metadata.name}')
-kubectl -n kube-system exec -it ${POD_NAME} bash
+kubectl -n kube-system attach -it ${POD_NAME}
 ```
 
 Once you're in, you have access to the set of tools listed in the `Dockerfile`. This includes:
 
- - [`vim`](https://github.com/vim/vim) - is a greatly improved version of the good old UNIX editor Vi. 
+ - [`vim`](https://github.com/vim/vim) - is a greatly improved version of the good old UNIX editor Vi.
  - [`screen`](https://www.gnu.org/software/screen/) - is a full-screen window manager that multiplexes a physical terminal between several processes, typically interactive shells.
  - [`curl`](https://github.com/curl/curl) - is a command-line tool for transferring data specified with URL syntax.
  - [`jq`](https://github.com/stedolan/jq) - is a lightweight and flexible command-line JSON processor.

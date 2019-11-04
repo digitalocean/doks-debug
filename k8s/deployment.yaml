@@ -20,7 +20,10 @@ spec:
         securityContext:
           privileged: true
         image: digitalocean/doks-debug:latest
-        command: [ "sleep", "infinity" ]
+        command: [ "bash" ]
+        stdin: true
+        stdinOnce: true
+        tty: true
         resources:
           requests:
             memory: "32Mi"
