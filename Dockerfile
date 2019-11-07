@@ -13,6 +13,7 @@ RUN apt-get update -qq && \
                        vim \
                        screen \
                        curl \
+                       atop \
                        htop \
                        dstat \
                        jq \
