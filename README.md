@@ -50,6 +50,7 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`docker`](https://docs.docker.com/engine/reference/commandline/cli/) - is the CLI tool used for interacting with Docker containers on the system.
  - [`dstat`](http://dag.wiee.rs/home-made/dstat/) - is a versatile replacement for vmstat, iostat, netstat and ifstat. Dstat overcomes some of their limitations and adds some extra features, more counters and flexibility. Dstat is handy for monitoring systems during performance tuning tests, benchmarks or troubleshooting.
  - [`htop`](https://hisham.hm/htop/) - is interactive process viewer for Unix systems.
+ - [`atop`](https://www.atoptool.nl/) - is an advanced interactive monitor for Linux-systems to view the load on system-level and process-level.
 
 # Tips and Tricks
 
