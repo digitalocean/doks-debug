@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         name: doks-debug
+      annotations:
+        clusterlint.digitalocean.com/disabled-checks: "hostpath-volume"
     spec:
       hostPID: true
       hostIPC: true
