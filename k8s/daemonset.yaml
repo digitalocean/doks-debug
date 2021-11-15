@@ -28,18 +28,14 @@ spec:
         image: digitalocean/doks-debug:latest
         command: [ "sleep", "infinity" ]
         resources:
-          requests:
-            memory: "32Mi"
-            cpu: "100m"
           limits:
-            memory: "32Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "500m"
         volumeMounts:
           - name: host
             mountPath: /host
           - name: docker
             mountPath: /var/run/docker.sock
-      priorityClassName: system-cluster-critical
       volumes:
         - name: host
           hostPath:

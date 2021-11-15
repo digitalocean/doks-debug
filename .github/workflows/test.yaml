@@ -1,0 +1,19 @@
+name: test
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
+        with:
+          fetch-depth: 1
+
+      - name: build image
+        run: docker build -t doks-debug .
+
+      - name: smoke test
+        run: docker run --rm doks-debug sleep 1
