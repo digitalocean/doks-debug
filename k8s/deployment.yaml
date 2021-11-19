@@ -29,6 +29,9 @@ spec:
         image: digitalocean/doks-debug:latest
         command: [ "sleep", "infinity" ]
         resources:
+          requests:
+            memory: "0"
+            cpu: "0"
           limits:
             memory: "500Mi"
             cpu: "500m"
