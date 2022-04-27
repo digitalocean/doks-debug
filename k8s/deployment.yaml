@@ -48,3 +48,8 @@ spec:
           hostPath:
             path: /var/run/docker.sock
             type: Socket
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
