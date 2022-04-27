@@ -1,6 +1,6 @@
 A Docker image with Kubernetes manifests for investigation and troubleshooting your cluster.
 
-[![Build Status](https://travis-ci.org/digitalocean/doks-debug.svg?branch=master)](https://travis-ci.org/digitalocean/doks-debug)
+![main build](https://github.com/digitalocean/doks-debug/actions/workflows/test.yaml/badge.svg) ![main release](https://github.com/digitalocean/doks-debug/actions/workflows/release.yaml/badge.svg)
 
 # Purpose
 
