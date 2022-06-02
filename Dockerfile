@@ -26,6 +26,9 @@ RUN apt-get update -qq && \
                        iproute2 \
                        strace \
                        telnet \
+                       openssl \
+                       psmisc \
+                       dsniff \
                        conntrack
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
