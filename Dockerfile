@@ -7,6 +7,7 @@ RUN apt-get update -qq && \
     apt-get install -y apt-transport-https \
                        ca-certificates \
                        software-properties-common \
+                       httping \
                        man \
                        manpages-posix \
                        man-db \
