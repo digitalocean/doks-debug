@@ -1,7 +1,15 @@
-FROM ubuntu:focal
+# match doks-debug version with DOKS worker node image version for kernel
+# tooling compatibility reasons
+FROM debian:10
+
 WORKDIR /root
 
-RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man\/*' /etc/dpkg/dpkg.cfg.d/excludes
+# use same dpkg path-exclude settings that come by default with ubuntu:focal
+# image that we previously used
+RUN echo 'path-exclude=/usr/share/locale/*/LC_MESSAGES/*.mo' > /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-exclude=/usr/share/doc/*' > /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-include=/usr/share/doc/*/copyright' > /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-include=/usr/share/doc/*/changelog.Debian.*' > /etc/dpkg/dpkg.cfg.d/excludes
 
 RUN apt-get update -qq && \
     apt-get install -y apt-transport-https \
@@ -9,11 +17,11 @@ RUN apt-get update -qq && \
                        software-properties-common \
                        httping \
                        man \
-                       manpages-posix \
                        man-db \
                        vim \
                        screen \
                        curl \
+                       gnupg \
                        atop \
                        htop \
                        dstat \
@@ -33,7 +41,7 @@ RUN apt-get update -qq && \
                        conntrack
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
     apt-get update -qq && \
     apt-get install -y docker-ce
 
