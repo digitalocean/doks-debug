@@ -1,6 +1,6 @@
 # match doks-debug version with DOKS worker node image version for kernel
 # tooling compatibility reasons
-FROM debian:10
+FROM debian:10-slim
 
 WORKDIR /root
 
