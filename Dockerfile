@@ -41,6 +41,7 @@ RUN apt-get update -qq && \
                        psmisc \
                        dsniff \
                        conntrack \
+                       llvm-8 llvm-8-tools \
                        bpftool
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
