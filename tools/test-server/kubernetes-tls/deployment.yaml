@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-server-tls
+  namespace: test-server-tls
+  labels:
+    app: test-server-tls
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-server-tls
+  template:
+    metadata:
+      labels:
+        app: test-server-tls
+    spec:
+      containers:
+      - name: test-server-tls
+        image: waynr/test-server:latest
+        command:
+          - /usr/bin/test-server
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
