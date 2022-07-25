@@ -21,5 +21,7 @@ spec:
         command:
           - /usr/bin/test-server
         ports:
-        - containerPort: 80
+        - name: http
+          containerPort: 8080
+          protocol: TCP
 

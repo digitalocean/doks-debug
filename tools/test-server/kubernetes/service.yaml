@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
-    service.beta.kubernetes.io/do-loadbalancer-healthcheck-check-interval-seconds: "120"
+    service.beta.kubernetes.io/do-loadbalancer-healthcheck-check-interval-seconds: "3"
     service.beta.kubernetes.io/do-loadbalancer-healthcheck-response-timeout-seconds: "6"
     service.beta.kubernetes.io/do-loadbalancer-healthcheck-unhealthy-threshold: "10"
   name: test-server
@@ -18,6 +18,6 @@ spec:
     - name: http
       port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 8080
   selector:
     app: test-server
