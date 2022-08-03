@@ -43,7 +43,7 @@ func main() {
 			validateDigest bool
 
 			buffer         = make([]byte, 1024+1024)
-			totalBytes     int
+			totalBytes     int64
 			hasher         = sha256.New()
 			responseStatus = http.StatusOK
 		)
@@ -51,7 +51,7 @@ func main() {
 		if requestUuid != "" {
 			prefixParts = append(prefixParts, requestUuid)
 		}
-		logger := log.New(os.Stdout, strings.Join(prefixParts, "-"), log.LstdFlags|log.Lmsgprefix|log.LUTC|log.Lmicroseconds)
+		logger := log.New(os.Stdout, strings.Join(prefixParts, "-")+" ", log.LstdFlags|log.Lmsgprefix|log.LUTC|log.Lmicroseconds)
 
 		if requestDigest != "" {
 			logger.Printf("digest: %s", requestDigest)
@@ -64,8 +64,8 @@ func main() {
 		for {
 			n, err := r.Body.Read(buffer)
 
-			totalBytes += n
-			logger.Printf("read %d bytes\n", n)
+			totalBytes += int64(n)
+			//logger.Printf("read %d bytes\n", n)
 			if validateDigest {
 				hasher.Write(buffer[:n])
 			}
@@ -79,15 +79,19 @@ func main() {
 			}
 		}
 
-		if validateDigest {
+		if totalBytes != r.ContentLength {
+			logger.Printf("content length mismatch, request: %d vs calculated: %d", r.ContentLength, totalBytes)
+			responseStatus = http.StatusBadRequest
+		} else if validateDigest {
 			calculatedDigest := fmt.Sprintf("%x", hasher.Sum(nil))
 			if requestDigest != calculatedDigest {
 				logger.Printf("digest mismatch, request: %s vs calculated: %s", requestDigest, calculatedDigest)
 				responseStatus = http.StatusBadRequest
 			}
+			logger.Printf("request and calculated digest match")
 		}
 
-		if sum > 0 {
+		if totalBytes > 0 {
 			logger.Printf("read %d total bytes\n", totalBytes)
 		}
 
