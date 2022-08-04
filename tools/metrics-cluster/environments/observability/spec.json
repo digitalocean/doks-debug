@@ -1,0 +1,14 @@
+{
+  "apiVersion": "tanka.dev/v1alpha1",
+  "kind": "Environment",
+  "metadata": {
+    "name": "environments/observability",
+    "namespace": "environments/observability/main.jsonnet"
+  },
+  "spec": {
+    "apiServer": "https://8d170cf2-3569-4f60-9b0b-e4d783a4069c.k8s.ondigitalocean.com",
+    "namespace": "observability",
+    "resourceDefaults": {},
+    "expectVersions": {}
+  }
+}
