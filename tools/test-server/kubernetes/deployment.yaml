@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: test-server
-        image: waynr/test-server:0.4.3
+        image: waynr/test-server:0.5.3
         command:
           - /usr/bin/test-server
         ports:
