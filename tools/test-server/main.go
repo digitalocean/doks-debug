@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/sha256"
 	"errors"
 	"fmt"
@@ -11,9 +12,65 @@ import (
 	"os"
 	"strings"
 	"sync/atomic"
+	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
+var (
+	httpConnectionsHistogram = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Subsystem: "testserver",
+		Name:      "http_connections_duration_s",
+		Help:      "HTTP connection establishment duration in seconds",
+		//     >>> for i in range(0, 20):
+		// ...   print("%.2f" % (0.01 * 1.9 ** i))
+		// ...
+		// 0.01
+		// 0.02
+		// 0.04
+		// 0.07
+		// 0.13
+		// 0.25
+		// 0.47
+		// 0.89
+		// 1.70
+		// 3.23
+		// 6.13
+		// 11.65
+		// 22.13
+		// 42.05
+		// 79.90
+		// 151.81
+		// 288.44
+		// 548.04
+		// 1041.27
+		// 1978.42
+		Buckets: prometheus.ExponentialBuckets(0.01, 1.9, 20),
+	},
+		[]string{
+			"method",
+			"status_code",
+			"result_type",
+			"content_length",
+			"source_region",
+			"region",
+		},
+	)
 )
 
 func main() {
+	ctx := context.Background()
+	http.Handle("/metrics", promhttp.Handler())
+	server := &http.Server{Addr: ":9100", Handler: nil}
+	go server.ListenAndServe()
+	defer server.Shutdown(ctx)
+
+	listenHTTP()
+}
+
+func listenHTTP() {
 	addrStr := ":8080"
 	address, err := net.ResolveTCPAddr("tcp", addrStr)
 
@@ -39,14 +96,40 @@ func main() {
 
 			requestUuid = r.Header.Get("x-request-id")
 
-			requestDigest  = r.Header.Get("digest")
+			requestDigest = r.Header.Get("digest")
+			sourceRegion  = r.Header.Get("region")
+			region        = os.Getenv("REGION")
+
 			validateDigest bool
 
 			buffer         = make([]byte, 1024+1024)
 			totalBytes     int64
 			hasher         = sha256.New()
 			responseStatus = http.StatusOK
+			startTime      = time.Now()
+			resultType     = "success"
 		)
+
+		if sourceRegion == "" {
+			sourceRegion = "unknown"
+		}
+
+		if region == "" {
+			region = "unknown"
+		}
+
+		defer func() {
+			labelValues := []string{
+				r.Method,
+				fmt.Sprintf("%d", responseStatus),
+				resultType,
+				fmt.Sprintf("%d", r.ContentLength),
+				sourceRegion,
+				region,
+			}
+			duration := time.Now().Sub(startTime).Seconds()
+			httpConnectionsHistogram.WithLabelValues(labelValues...).Observe(duration)
+		}()
 
 		if requestUuid != "" {
 			prefixParts = append(prefixParts, requestUuid)
@@ -81,11 +164,13 @@ func main() {
 
 		if totalBytes != r.ContentLength {
 			logger.Printf("content length mismatch, request: %d vs calculated: %d", r.ContentLength, totalBytes)
+			resultType = "content length mismatch"
 			responseStatus = http.StatusBadRequest
 		} else if validateDigest {
 			calculatedDigest := fmt.Sprintf("%x", hasher.Sum(nil))
 			if requestDigest != calculatedDigest {
 				logger.Printf("digest mismatch, request: %s vs calculated: %s", requestDigest, calculatedDigest)
+				resultType = "digest mismatch"
 				responseStatus = http.StatusBadRequest
 			}
 			logger.Printf("request and calculated digest match")
