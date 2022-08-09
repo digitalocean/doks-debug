@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushprox-proxy
+  namespace: observability
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: pushprox-proxy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pushprox-proxy
+  namespace: observability
+spec:
+  selector:
+    matchLabels:
+      app: pushprox-proxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pushprox-proxy
+    spec:
+      containers:
+      - name: pushprox-proxy
+        image: prometheuscommunity/pushprox:master
+        ports:
+        - containerPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pushprox-proxy
+  namespace: observability
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+spec:
+  rules:
+  - host: "metrics.waynr.net"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: pushprox-proxy
+            port:
+              number: 80
