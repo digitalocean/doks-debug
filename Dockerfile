@@ -40,6 +40,7 @@ RUN apt-get update -qq && \
                        openssl \
                        psmisc \
                        dsniff \
+                       mtr-tiny \
                        conntrack \
                        llvm-8 llvm-8-tools \
                        bpftool
