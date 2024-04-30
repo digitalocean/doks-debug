@@ -30,6 +30,7 @@ RUN apt-get update -qq && \
                        tcpdump \
                        traceroute \
                        iputils-ping \
+                       iptables \
                        net-tools \
                        ncat \
                        iproute2 \
