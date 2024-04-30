@@ -40,6 +40,7 @@ spec:
             mountPath: /host
           - name: docker
             mountPath: /var/run/docker.sock
+      terminationGracePeriodSeconds: 0
       volumes:
         - name: host
           hostPath:
