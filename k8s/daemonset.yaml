@@ -15,6 +15,7 @@ spec:
         name: doks-debug
       annotations:
         clusterlint.digitalocean.com/disabled-checks: "hostpath-volume"
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
     spec:
       hostPID: true
       hostIPC: true
