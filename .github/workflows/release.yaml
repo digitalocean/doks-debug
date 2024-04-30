@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 1
 
       - name: build image
-        run: docker build -t digitalocean/doks-debug:latest .
+        run: docker build --platform linux/amd64 -t digitalocean/doks-debug:latest .
 
       - name: Log into container registry
         run: echo "${{ secrets.DockerHubToken }}" | docker login --username ${DOCKER_USER} --password-stdin

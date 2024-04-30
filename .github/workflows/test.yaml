@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 1
 
       - name: build image
-        run: docker build -t doks-debug .
+        run: docker build --platform linux/amd64 -t doks-debug .
 
       - name: smoke test
         run: docker run --rm doks-debug sleep 1
