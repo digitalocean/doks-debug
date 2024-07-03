@@ -17,6 +17,7 @@ spec:
         clusterlint.digitalocean.com/disabled-checks: "hostpath-volume"
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
     spec:
+      dnsPolicy: ClusterFirstWithHostNet
       hostPID: true
       hostIPC: true
       hostNetwork: true
