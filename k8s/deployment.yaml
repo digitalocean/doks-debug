@@ -40,17 +40,11 @@ spec:
         volumeMounts:
           - name: host
             mountPath: /host
-          - name: docker
-            mountPath: /var/run/docker.sock
       terminationGracePeriodSeconds: 0
       volumes:
         - name: host
           hostPath:
             path: /
-        - name: docker
-          hostPath:
-            path: /var/run/docker.sock
-            type: Socket
   strategy:
     rollingUpdate:
       maxSurge: 0

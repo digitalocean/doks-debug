@@ -44,9 +44,4 @@ RUN apt-get update -qq && \
                        llvm-13 llvm-13-tools \
                        bpftool
 
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
-    apt-get update -qq && \
-    apt-get install -y docker
-
 CMD [ "/bin/bash" ]
