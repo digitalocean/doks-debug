@@ -6,10 +6,10 @@ WORKDIR /root
 
 # use same dpkg path-exclude settings that come by default with ubuntu:focal
 # image that we previously used
-RUN echo 'path-exclude=/usr/share/locale/*/LC_MESSAGES/*.mo' > /etc/dpkg/dpkg.cfg.d/excludes
-RUN echo 'path-exclude=/usr/share/doc/*' > /etc/dpkg/dpkg.cfg.d/excludes
-RUN echo 'path-include=/usr/share/doc/*/copyright' > /etc/dpkg/dpkg.cfg.d/excludes
-RUN echo 'path-include=/usr/share/doc/*/changelog.Debian.*' > /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-exclude=/usr/share/locale/*/LC_MESSAGES/*.mo' >> /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-exclude=/usr/share/doc/*' >> /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-include=/usr/share/doc/*/copyright' ≥> /etc/dpkg/dpkg.cfg.d/excludes
+RUN echo 'path-include=/usr/share/doc/*/changelog.Debian.*' ≥> /etc/dpkg/dpkg.cfg.d/excludes
 
 RUN apt-get update -qq && \
     apt-get install -y apt-transport-https \
