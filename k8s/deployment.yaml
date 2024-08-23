@@ -40,11 +40,17 @@ spec:
         volumeMounts:
           - name: host
             mountPath: /host
+          - name: containerd
+            mountPath: /run/containerd/containerd.sock
       terminationGracePeriodSeconds: 0
       volumes:
         - name: host
           hostPath:
             path: /
+        - name: containerd
+          hostPath:
+            path: /run/containerd/containerd.sock
+            type: Socket
   strategy:
     rollingUpdate:
       maxSurge: 0
