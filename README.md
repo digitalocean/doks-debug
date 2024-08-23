@@ -50,7 +50,6 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`dstat`](http://dag.wiee.rs/home-made/dstat/) - is a versatile replacement for vmstat, iostat, netstat and ifstat. Dstat overcomes some of their limitations and adds some extra features, more counters and flexibility. Dstat is handy for monitoring systems during performance tuning tests, benchmarks or troubleshooting.
  - [`htop`](https://hisham.hm/htop/) - is interactive process viewer for Unix systems.
  - [`atop`](https://www.atoptool.nl/) - is an advanced interactive monitor for Linux-systems to view the load on system-level and process-level.
- - [`atop`](https://www.atoptool.nl/) - is an advanced interactive monitor for Linux-systems to view the load on system-level and process-level.
  - [`wget`](https://www.gnu.org/software/wget/) - for retrieving files using HTTP, HTTPS, FTP and FTPS.
  - [`crictl`](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md) - A CLI for CRI endpoints. Configured to use `/run/containerd/containerd.sock` as a default endpoint. 
 # Tips and Tricks
