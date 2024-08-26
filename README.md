@@ -29,7 +29,7 @@ If you know the specific node name that you're interested in, you can exec into 
 
 ```bash
 NODE_NAME="my-node-name"
-POD_NAME=$(kubectl -n kube-system get pods --field-selector spec.nodeName=${NODE_NAME} -ojsonpath='{.items[0].metadata.name}')
+POD_NAME=$(kubectl -n kube-system get pods --field-selector spec.nodeName=${NODE_NAME} -ojsonpath='{.items[?(@.metadata.labels.name=="doks-debug")].metadata.name}')
 kubectl -n kube-system exec -it ${POD_NAME} bash
 ```
 
