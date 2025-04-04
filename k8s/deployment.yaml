@@ -28,7 +28,7 @@ spec:
       - name: doks-debug
         securityContext:
           privileged: true
-        image: digitalocean/doks-debug:latest
+        image: ghcr.io/digitalocean-packages/doks-debug:latest
         command: [ "sleep", "infinity" ]
         resources:
           requests:
