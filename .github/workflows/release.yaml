@@ -1,8 +1,5 @@
 name: release
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GHCRTOKEN }}
-
 on:
   push:
     branches:
@@ -20,6 +17,9 @@ jobs:
 
       - name: build image
         run: docker build --platform linux/amd64 -t ghcr.io/digitalocean-packages/doks-debug:latest .
+
+      - name: log into container registry
+        run: echo "${{ secrets.GHCRTOKEN }}" | docker login --username "${{ secrets.GHCRUSER }}" --password-stdin
 
       - name: push image
         run: docker push ghcr.io/digitalocean-packages/doks-debug:latest
