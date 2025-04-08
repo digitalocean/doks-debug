@@ -1,7 +1,7 @@
 name: release
 
 env:
-  DOCKER_USER: ${{ secrets.DockerHubUser }}
+  GITHUB_TOKEN: ${{ secrets.GHCRTOKEN }}
 
 on:
   push:
@@ -14,15 +14,12 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2.4.0
         with:
           fetch-depth: 1
 
       - name: build image
-        run: docker build --platform linux/amd64 -t digitalocean/doks-debug:latest .
-
-      - name: Log into container registry
-        run: echo "${{ secrets.DockerHubToken }}" | docker login --username ${DOCKER_USER} --password-stdin
+        run: docker build --platform linux/amd64 -t ghcr.io/digitalocean-packages/doks-debug:latest .
 
       - name: push image
-        run: docker push digitalocean/doks-debug:latest
+        run: docker push ghcr.io/digitalocean-packages/doks-debug:latest
