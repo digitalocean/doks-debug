@@ -19,7 +19,7 @@ jobs:
         run: docker build --platform linux/amd64 -t ghcr.io/digitalocean-packages/doks-debug:latest .
 
       - name: log into container registry
-        run: echo "${{ secrets.GHCRTOKEN }}" | docker login --username "${{ secrets.GHCRUSER }}" --password-stdin
+        run: echo "${{ secrets.GHCRTOKEN }}" | docker login ghcr.io --username "${{ secrets.GHCRUSER }}" --password-stdin
 
       - name: push image
         run: docker push ghcr.io/digitalocean-packages/doks-debug:latest
