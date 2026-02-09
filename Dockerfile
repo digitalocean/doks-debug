@@ -31,6 +31,7 @@ RUN apt-get update -qq && \
                        jq \
                        dnsutils \
                        tcpdump \
+                       termshark \
                        traceroute \
                        iputils-ping \
                        iptables \
@@ -38,6 +39,7 @@ RUN apt-get update -qq && \
                        ncat \
                        iproute2 \
                        strace \
+                       lsof \
                        telnet \
                        openssl \
                        psmisc \
@@ -46,6 +48,7 @@ RUN apt-get update -qq && \
                        conntrack \
                        llvm-13 llvm-13-tools \
                        wget \
+                       watch \
                        bpftool
 
 # Install crictl
