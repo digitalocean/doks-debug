@@ -1,6 +1,6 @@
 # match doks-debug version with DOKS worker node image version for kernel
 # tooling compatibility reasons
-FROM debian:12-slim
+FROM debian:13-slim
 
 # Specify the version of crictl to install
 ARG CRICTL_VERSION="v1.31.1"
@@ -17,7 +17,6 @@ RUN echo 'path-include=/usr/share/doc/*/changelog.Debian.*' >> /etc/dpkg/dpkg.cf
 RUN apt-get update -qq && \
     apt-get install -y apt-transport-https \
                        ca-certificates \
-                       software-properties-common \
                        httping \
                        man \
                        man-db \
@@ -46,7 +45,7 @@ RUN apt-get update -qq && \
                        dsniff \
                        mtr-tiny \
                        conntrack \
-                       llvm-13 llvm-13-tools \
+                       llvm-19 llvm-19-tools \
                        wget \
                        watch \
                        bpftool
