@@ -49,7 +49,8 @@ RUN apt-get update -qq && \
                        llvm-13 llvm-13-tools \
                        wget \
                        watch \
-                       bpftool
+                       bpftool \
+                       xdp-tools
 
 # Install crictl
 RUN wget https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-amd64.tar.gz && \
