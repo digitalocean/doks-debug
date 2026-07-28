@@ -8,7 +8,7 @@ The DOKS team provides this image for use as-is and for transparency as the imag
 
 # Usage
 
-Prefer the **DaemonSet** when you need debug pods on many nodes, or the ephemeral **`slurp`** helper when you need access to a single node. Avoid leaving a long-lived `doks-debug` Deployment in the cluster.
+Prefer the **DaemonSet** when you need debug pods on many nodes, or the ephemeral **`debug-node`** helper when you need access to a single node. Avoid leaving a long-lived `doks-debug` Deployment in the cluster.
 
 ## DaemonSet
 
@@ -44,18 +44,18 @@ Clean up when finished:
 kubectl delete -f k8s/daemonset.yaml
 ```
 
-## Ephemeral single-node access (`slurp`)
+## Ephemeral single-node access (`debug-node`)
 
-For short-lived access to one node, use `script/slurp`. It creates a `doks-debug` Deployment pinned with a `nodeSelector`, execs into the host via `chroot /host`, and deletes the Deployment when you exit.
+For short-lived access to one node, use `script/debug-node`. It creates a `doks-debug` Deployment pinned with a `nodeSelector`, execs into the host via `chroot /host`, and deletes the Deployment when you exit.
 
 ```bash
-./script/slurp <node-name>
+./script/debug-node <node-name>
 ```
 
 The Deployment manifest does **not** include a default catch-all toleration. A long-lived Deployment with `tolerations: [{operator: Exists}]` can reschedule onto draining nodes and block scale-down or upgrades. If you need to reach a tainted or cordoned node for a brief session, pass `--tolerate-all`:
 
 ```bash
-./script/slurp --tolerate-all <node-name>
+./script/debug-node --tolerate-all <node-name>
 ```
 
 Requires `kubectl`, `curl` (if the local manifest is unavailable), and [`yq`](https://github.com/mikefarah/yq).

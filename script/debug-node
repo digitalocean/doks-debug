@@ -2,7 +2,7 @@
 # Ephemeral node access via a doks-debug Deployment.
 # Pins to one node, execs in, and deletes the Deployment on exit.
 #
-# Usage: slurp [--tolerate-all] <node-name>
+# Usage: debug-node [--tolerate-all] <node-name>
 #
 # --tolerate-all  Inject tolerations: operator: Exists so the pod can land on
 #                 tainted/cordoned nodes. Use only for short-lived sessions;
