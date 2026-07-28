@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+# Ephemeral node access via a doks-debug Deployment.
+# Pins to one node, execs in, and deletes the Deployment on exit.
+#
+# Usage: slurp [--tolerate-all] <node-name>
+#
+# --tolerate-all  Inject tolerations: operator: Exists so the pod can land on
+#                 tainted/cordoned nodes. Use only for short-lived sessions;
+#                 long-lived Deployments with this toleration can block drains
+#                 and upgrades.
+
+set -euo pipefail
+
+tolerate_all=false
+node_name=""
+
+usage() {
+  echo "Usage: $(basename "$0") [--tolerate-all] <node-name>"
+  echo "  connect and chroot into the node using an ephemeral doks-debug Deployment"
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --tolerate-all)
+      tolerate_all=true
+      shift
+      ;;
+    -*)
+      echo "Error: unknown option: $1" >&2
+      usage >&2
+      exit 1
+      ;;
+    *)
+      if [[ -n "$node_name" ]]; then
+        echo "Error: unexpected argument: $1" >&2
+        usage >&2
+        exit 1
+      fi
+      node_name="$1"
+      shift
+      ;;
+  esac
+done
+
+if [[ -z "$node_name" ]]; then
+  usage >&2
+  exit 1
+fi
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+local_manifest="${script_dir}/../k8s/deployment.yaml"
+remote_manifest_url="https://raw.githubusercontent.com/digitalocean/doks-debug/refs/heads/master/k8s/deployment.yaml"
+
+deployment_name="doks-debug"
+deployment_namespace="kube-system"
+
+cleanup() {
+  kubectl delete deployment "${deployment_name}" \
+    --namespace "${deployment_namespace}" \
+    --ignore-not-found=true
+}
+trap cleanup EXIT
+
+if [[ -f "$local_manifest" ]]; then
+  doks_debug_deployment_yaml="$(cat "$local_manifest")"
+else
+  doks_debug_deployment_yaml="$(curl --silent --fail --location "$remote_manifest_url")"
+fi
+
+if [[ -z "$doks_debug_deployment_yaml" ]]; then
+  echo "Error: failed to load the deployment manifest." >&2
+  exit 1
+fi
+
+if ! command -v yq >/dev/null 2>&1; then
+  echo "Error: yq is required (https://github.com/mikefarah/yq)." >&2
+  exit 1
+fi
+
+modified_yaml="$(
+  echo "$doks_debug_deployment_yaml" | \
+    nodeName="$node_name" yq '.spec.template.spec.nodeSelector["kubernetes.io/hostname"] = env(nodeName)'
+)"
+
+if [[ "$tolerate_all" == true ]]; then
+  modified_yaml="$(
+    echo "$modified_yaml" | \
+      yq '.spec.template.spec.tolerations = [{"operator": "Exists"}]'
+  )"
+fi
+
+echo "$modified_yaml" | kubectl apply -f -
+
+kubectl wait deployment "${deployment_name}" \
+  --namespace "${deployment_namespace}" \
+  --for=condition=Available \
+  --timeout=120s \
+  >/dev/null
+
+pod_name="$(
+  kubectl get pods \
+    --namespace "${deployment_namespace}" \
+    -l name=doks-debug \
+    -o jsonpath='{.items[0].metadata.name}'
+)"
+
+if [[ -z "$pod_name" ]]; then
+  echo "Error: could not find a running pod for the deployment." >&2
+  exit 1
+fi
+
+kubectl wait pod "${pod_name}" \
+  --namespace "${deployment_namespace}" \
+  --for=condition=Ready \
+  --timeout=60s \
+  >/dev/null
+
+kubectl exec -it "${pod_name}" \
+  --namespace "${deployment_namespace}" \
+  -- chroot /host bash
