@@ -22,8 +22,6 @@ spec:
       hostPID: true
       hostIPC: true
       hostNetwork: true
-      tolerations:
-      - operator: Exists
       containers:
       - name: doks-debug
         securityContext:

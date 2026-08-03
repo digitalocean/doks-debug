@@ -8,6 +8,10 @@ The DOKS team provides this image for use as-is and for transparency as the imag
 
 # Usage
 
+Prefer the **DaemonSet** when you need debug pods on many nodes, or the ephemeral **`debug-node`** helper when you need access to a single node. Avoid leaving a long-lived `doks-debug` Deployment in the cluster.
+
+## DaemonSet
+
 ```bash
 kubectl apply -f k8s/daemonset.yaml
 ```
@@ -18,6 +22,7 @@ This DaemonSet manifest will:
  2. Use `hostPID`, `hostIPC`, and `hostNetwork`.
  3. Mount the entire host filesystem to `/host` in the containers.
  4. Mount the `containerd` socket at `/run/containerd/containerd.sock` from the host into the container.
+ 5. Tolerate all taints (`operator: Exists`) so pods can land on cordoned or specially tainted nodes.
 
 In order to make use of these workloads, you can exec into a pod of choice by name:
 
@@ -32,6 +37,28 @@ NODE_NAME="my-node-name"
 POD_NAME=$(kubectl -n kube-system get pods --field-selector spec.nodeName=${NODE_NAME} -ojsonpath='{.items[0].metadata.name}')
 kubectl -n kube-system exec -it ${POD_NAME} bash
 ```
+
+Clean up when finished:
+
+```bash
+kubectl delete -f k8s/daemonset.yaml
+```
+
+## Ephemeral single-node access (`debug-node`)
+
+For short-lived access to one node, use `script/debug-node`. It creates a `doks-debug` Deployment pinned with a `nodeSelector`, execs into the host via `chroot /host`, and deletes the Deployment when you exit.
+
+```bash
+./script/debug-node <node-name>
+```
+
+The Deployment manifest does **not** include a default catch-all toleration. A long-lived Deployment with `tolerations: [{operator: Exists}]` can reschedule onto draining nodes and block scale-down or upgrades. If you need to reach a tainted or cordoned node for a brief session, pass `--tolerate-all`:
+
+```bash
+./script/debug-node --tolerate-all <node-name>
+```
+
+Requires `kubectl`, `curl` (if the local manifest is unavailable), and [`yq`](https://github.com/mikefarah/yq).
 
 Once you're in, you have access to the set of tools listed in the `Dockerfile`. This includes:
 
