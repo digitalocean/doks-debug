@@ -61,4 +61,23 @@ RUN echo 'runtime-endpoint: unix:///run/containerd/containerd.sock' >> /etc/cric
 RUN echo 'image-endpoint: unix:///run/containerd/containerd.sock' >> /etc/crictl.yaml
 RUN echo 'timeout: 2' >> /etc/crictl.yaml
 
+# Install amd-smi (ROCm standalone; for AMD GPU node debugging)
+ARG ROCM_MAJOR_MINOR="7.14"
+ARG ROCM_PKG_VERSION="7.14.0-3"
+
+RUN mkdir --parents --mode=0755 /etc/apt/keyrings && \
+    wget https://repo.amd.com/rocm/packages-multi-arch/gpg/rocm.gpg -O - | \
+      gpg --dearmor | tee /etc/apt/keyrings/amdrocm.gpg > /dev/null && \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/amdrocm.gpg] https://repo.amd.com/rocm/packages-multi-arch/debian13 stable main" \
+      > /etc/apt/sources.list.d/rocm.list && \
+    apt-get update -qq && \
+    apt-get install -y "amdrocm-amdsmi${ROCM_MAJOR_MINOR}=${ROCM_PKG_VERSION}" && \
+    echo "/opt/rocm/core-${ROCM_MAJOR_MINOR}/lib" > /etc/ld.so.conf.d/amd-rocm-smi.conf && \
+    ldconfig && \
+    ln -sf "/opt/rocm/core-${ROCM_MAJOR_MINOR}/bin/amd-smi" /usr/local/bin/amd-smi && \
+    rm -f /etc/apt/sources.list.d/rocm.list && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    rm /etc/apt/keyrings/amdrocm.gpg
+
+
 CMD [ "/bin/bash" ]

@@ -79,6 +79,7 @@ Once you're in, you have access to the set of tools listed in the `Dockerfile`. 
  - [`atop`](https://www.atoptool.nl/) - is an advanced interactive monitor for Linux-systems to view the load on system-level and process-level.
  - [`wget`](https://www.gnu.org/software/wget/) - for retrieving files using HTTP, HTTPS, FTP and FTPS.
  - [`crictl`](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md) - A CLI for CRI endpoints. Configured to use `/run/containerd/containerd.sock` as a default endpoint. 
+ - [`amd-smi`](https://rocm.docs.amd.com/projects/amdsmi/en/docs-7.14.0/index.html) - AMD GPU system management CLI (ROCm 7.14 standalone `amdrocm-amdsmi`). Use on AMD GPU nodes from the container shell: (e.g. `amd-smi version`, `amd-smi list`).
 # Tips and Tricks
 
 ## chroot + systemctl
